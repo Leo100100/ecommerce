@@ -119,6 +119,18 @@ class OrderController extends Controller
         return back()->with('success', 'Produto adicionado ao carrinho!');
     }
 
+    public function destroy(Order $order)
+    {
+        dd("oi");
+        try {
+            $order->delete();
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+        return redirect()->route('orders.index')
+            ->with('success', 'Pedido excluído com sucesso!');
+    }
+
 
 }
 

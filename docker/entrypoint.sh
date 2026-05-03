@@ -23,9 +23,9 @@ if ! grep -qE '^APP_KEY=base64:.{40,}$' /var/www/.env; then
 fi
 
 # Otimiza configuração
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# php artisan config:cache
+# php artisan route:cache
+# php artisan view:cache
 
 # Executa migrações
 echo "==> Executando migrações..."

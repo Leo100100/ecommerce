@@ -36,10 +36,12 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Produto criado com sucesso!');
     }
+
     public function edit(Product $product)
     {
         return view('products.edit', compact('product'));
     }
+
     public function update(Request $request, Product $product)
     {
         $request->validate([
@@ -53,6 +55,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Produto atualizado com sucesso!');
     }
+
     public function destroy(Product $product)
     {
         $product->delete();

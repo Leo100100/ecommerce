@@ -13,6 +13,7 @@ Route::patch('/orders', [OrderController::class, 'index'])->name('orders.index')
 
     require __DIR__.'/orders.php';
     require __DIR__.'/products.php';
+    require __DIR__.'/cart.php';
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

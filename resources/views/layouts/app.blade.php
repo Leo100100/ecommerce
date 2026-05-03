@@ -65,6 +65,13 @@
                             <span class="sidebar-label">Pedidos</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-2 px-4 py-3 text-white @if(request()->routeIs('cart.*')) bg-primary rounded-0 @endif"
+                           href="{{ route('cart.index') }}">
+                            <i class="cil-cart" style="font-size:1.1rem;"></i>
+                            <span class="sidebar-label">Carrinho</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>

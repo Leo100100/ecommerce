@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('orders')->group(function () {
 
+    Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+
+    Route::get('/show', [OrderController::class, 'show'])->name('orders.show');
 
     // Atualizar status
     Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
@@ -16,5 +19,8 @@ Route::prefix('orders')->group(function () {
 
     // Adicionar produto ao pedido
     Route::post('add-product', [OrderController::class, 'addProduct'])->name('orders.addProduct');
+
+
+    Route::delete('/destroy', [OrderController::class, 'destroy'])->name('orders.destroy');
 });
 ?>
