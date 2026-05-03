@@ -1,0 +1,31 @@
+# Dependências (resolvidas dentro do container com PHP 8.2)
+vendor/
+node_modules/
+composer.lock
+
+# Ambiente local
+.env
+.env.local
+
+# Cache e logs gerados em runtime
+bootstrap/cache/*.php
+storage/logs/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Artefatos de desenvolvimento
+.git/
+.gitignore
+.github/
+
+# Documentação e testes
+README.md
+*.md
+tests/
+phpunit.xml
+
+# Ferramentas locais
+.editorconfig
+.php-cs-fixer.php
+phpstan.neon

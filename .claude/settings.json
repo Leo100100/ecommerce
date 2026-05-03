@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/brunna/projetos/ecommerce-challenge/routes/**)",
+      "Read(//home/brunna/projetos/ecommerce-challenge/**)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('require',{}\\)\\)\")",
+      "Bash(sudo apt-get *)"
+    ],
+    "additionalDirectories": [
+      "/home/brunna/projetos/ecommerce-challenge/app/Models",
+      "/home/brunna/projetos/ecommerce-challenge/app/Services",
+      "/home/brunna/projetos/ecommerce-challenge/resources/views",
+      "/home/brunna/projetos/ecommerce-challenge/routes",
+      "/home/brunna/projetos/ecommerce-challenge/database/seeders",
+      "/home/brunna/projetos/ecommerce-challenge"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp -r /home/brunna/projetos/ecommerce-challenge/vendor/laravel/breeze/stubs/default/app/Http/Controllers/Auth /home/brunna/projetos/ecommerce-challenge/app/Http/Controllers/Auth)",
+      "Bash(cp /home/brunna/projetos/ecommerce-challenge/vendor/laravel/breeze/stubs/default/app/Http/Requests/Auth/LoginRequest.php /home/brunna/projetos/ecommerce-challenge/app/Http/Requests/Auth/LoginRequest.php)",
+      "Bash(mkdir -p /home/brunna/projetos/ecommerce-challenge/app/Http/Requests)",
+      "Bash(cp /home/brunna/projetos/ecommerce-challenge/vendor/laravel/breeze/stubs/default/app/Http/Requests/ProfileUpdateRequest.php /home/brunna/projetos/ecommerce-challenge/app/Http/Requests/ProfileUpdateRequest.php)",
+      "Bash(cp /home/brunna/projetos/ecommerce-challenge/vendor/laravel/breeze/stubs/default/routes/auth.php /home/brunna/projetos/ecommerce-challenge/routes/auth.php)"
+    ]
+  }
+}
