@@ -40,9 +40,6 @@ class OrderController extends Controller
                 'total' => $request->total,
                 'status' => $request->status,
             ]);
-
-
-
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -121,15 +118,7 @@ class OrderController extends Controller
 
         return back()->with('success', 'Produto adicionado ao carrinho!');
     }
-    public function cart()
-    {
-        $order = Order::where('user_id', auth()->id())
-            ->where('status', 'pendente')
-            ->with('items.product')
-            ->first();
 
-        return view('cart.index', compact('order'));
-    }
 
 }
 

@@ -7,44 +7,6 @@
     <h4 class="mb-0">Dashboard</h4>
 </div>
 
-{{-- STATS --}}
-
-<!--{{-- <div class="row g-4 mb-4">
-    <div class="col-sm-6 col-xl-4">
-        <div class="card text-white bg-primary">
-            <div class="card-body d-flex align-items-center p-4">
-                <div>
-                    <div class="fs-4 fw-semibold">{{ $stats['total_products'] }}</div>
-                    <div class="text-uppercase small fw-semibold opacity-75">Produtos</div>
-                </div>
-                <div class="ms-auto opacity-50 fs-1"><i class="cil-tags"></i></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-xl-4">
-        <div class="card text-white bg-info">
-            <div class="card-body d-flex align-items-center p-4">
-                <div>
-                    <div class="fs-4 fw-semibold">{{ $stats['total_orders'] }}</div>
-                    <div class="text-uppercase small fw-semibold opacity-75">Pedidos</div>
-                </div>
-                <div class="ms-auto opacity-50 fs-1"><i class="cil-cart"></i></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-xl-4">
-        <div class="card text-white bg-warning">
-            <div class="card-body d-flex align-items-center p-4">
-                <div>
-                    <div class="fs-4 fw-semibold">{{ $stats['orders_pending'] }}</div>
-                    <div class="text-uppercase small fw-semibold opacity-75">Aguardando</div>
-                </div>
-                <div class="ms-auto opacity-50 fs-1"><i class="cil-clock"></i></div>
-            </div>
-        </div>
-    </div>
-</div> --}} -->
-
 {{-- BOAS-VINDAS --}}
 
 <div class="card mb-4">

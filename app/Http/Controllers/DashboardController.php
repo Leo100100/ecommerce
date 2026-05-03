@@ -10,9 +10,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // // $stats = [
-        //     // 'total_products' => Product::count(),
-        //     // 'total_orders'   => Order::count(),
+        // $stats = [
+        //     'total_products' => Product::count(),
+        //     'total_orders'   => Order::count(),
         //      'orders_pending' => Order::where('status', 'pendente')->count(),
         //  ];
 
