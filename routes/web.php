@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WebhookController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -12,10 +13,14 @@ Route::middleware(['auth'])->group(function () {
     require __DIR__.'/orders.php';
     require __DIR__.'/products.php';
     require __DIR__.'/cart.php';
+    require __DIR__.'/checkout.php';
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 });
+
+
+Route::post('/asaas/webhook', [WebhookController::class, 'handle']);
 
 
 require __DIR__.'/auth.php';

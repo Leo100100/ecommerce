@@ -8,6 +8,7 @@ Route::prefix('cart')->group(function () {
     Route::post('/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::post('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    
 });
 
 

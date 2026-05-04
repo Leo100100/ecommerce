@@ -94,10 +94,12 @@
         Total: R$ {{ number_format($order->total, 2, ',', '.') }}
     </h5>
 
-    <a href="#" class="btn btn-success">
+    <form action="{{ route('checkout.store') }}" method="POST">
+    @csrf
+    <button class="btn btn-success">
         Finalizar compra
-    </a>
-
+    </button>
+    </form>
 </div>
 
             <tfoot class="table-light">
