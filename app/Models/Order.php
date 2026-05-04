@@ -36,4 +36,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderStatusHistory::class);
     }
+    public function recalcularTotal()
+    {
+        $total = $this->items->sum(function ($item) {
+            return $item->preco * $item->quantidade;
+        });
+
+        $this->update(['total' => $total]);
+    }
 }

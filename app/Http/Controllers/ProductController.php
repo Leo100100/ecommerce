@@ -63,5 +63,15 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Produto removido com sucesso!');
     }
+    public function shop()
+    {
+        $products = Product::where('ativo', true)->get();
+        return view('shop.index', compact('products'));
+    }
+
+    public function showShop(Product $product)
+    {
+        return view('shop.show', compact('product'));
+    }
     // TODO (candidato): implementar create, store, edit, update, destroy
 }

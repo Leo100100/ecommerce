@@ -30,30 +30,75 @@
                     <th class="text-center">Quantidade</th>
                     <th class="text-end">Preço</th>
                     <th class="text-end">Subtotal</th>
+                    <th class="text-center">Ações</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach($order->items as $item)
-                <tr>
-                    <td>
-                        {{ $item->product->nome ?? $item->product->name }}
-                    </td>
+@foreach($order->items as $item)
+<tr>
 
-                    <td class="text-center">
-                        {{ $item->quantidade }}
-                    </td>
+    <td>
+        {{ $item->product->nome ?? $item->product->name }}
+    </td>
 
-                    <td class="text-end">
-                        R$ {{ number_format($item->preco, 2, ',', '.') }}
-                    </td>
+    {{-- QUANTIDADE COM CONTROLE --}}
+    <td class="text-center">
 
-                    <td class="text-end">
-                        R$ {{ number_format($item->preco * $item->quantidade, 2, ',', '.') }}
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+        <div class="d-flex justify-content-center align-items-center gap-2">
+
+            {{-- DIMINUIR --}}
+            <form action="{{ route('cart.update', $item->product_id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="quantidade" value="{{ $item->quantidade - 1 }}">
+                <button class="btn btn-sm btn-outline-secondary">-</button>
+            </form>
+
+            <span>{{ $item->quantidade }}</span>
+
+            {{-- AUMENTAR --}}
+            <form action="{{ route('cart.update', $item->product_id) }}" method="POST">
+                @csrf
+                <input type="hidden" name="quantidade" value="{{ $item->quantidade + 1 }}">
+                <button class="btn btn-sm btn-outline-secondary">+</button>
+            </form>
+
+        </div>
+
+    </td>
+
+    <td class="text-end">
+        R$ {{ number_format($item->preco, 2, ',', '.') }}
+    </td>
+
+    <td class="text-end">
+        R$ {{ number_format($item->preco * $item->quantidade, 2, ',', '.') }}
+    </td>
+
+    {{-- REMOVER --}}
+    <td class="text-center">
+        <form action="{{ route('cart.remove', $item->product_id) }}" method="POST">
+            @csrf
+            <button class="btn btn-sm btn-outline-danger">
+                ❌
+            </button>
+        </form>
+    </td>
+
+</tr>
+@endforeach
+</tbody>
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+    <h5 class="mb-0">
+        Total: R$ {{ number_format($order->total, 2, ',', '.') }}
+    </h5>
+
+    <a href="#" class="btn btn-success">
+        Finalizar compra
+    </a>
+
+</div>
 
             <tfoot class="table-light">
                 <tr>
@@ -61,6 +106,7 @@
                     <td class="text-end fw-bold">
                         R$ {{ number_format($order->total, 2, ',', '.') }}
                     </td>
+                    <td></td>
                 </tr>
             </tfoot>
 
