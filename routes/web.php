@@ -20,9 +20,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::post('/asaas/webhook', [WebhookController::class, 'handle']);
-
+require __DIR__.'/webhook.php';
 
 require __DIR__.'/auth.php';
-
 

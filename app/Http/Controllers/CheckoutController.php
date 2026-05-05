@@ -22,18 +22,16 @@ class CheckoutController extends Controller
 
     //  CRIAR CLIENTE
     $customer = $asaas->createCustomer([
-        'name' => auth()->user()->name,
-        'email' => auth()->user()->email,
+    'name' => auth()->user()->name,
+    'email' => auth()->user()->email,
+    'cpfCnpj' => '12345678909',
     ]);
 
-    //  SE DER ERRO, PARA AQUI
     if (!isset($customer['id'])) {
-         return back()->with('error', 'Erro ao criar cliente no Asaas');
-        // dd(config('services.asaas.api_key'));
-        // dd($customer);
+    return back()->with('error', 'Erro ao criar cliente: ' . ($customer['errors'][0]['description'] ?? 'Erro desconhecido'));
     }
 
-    // CRIAR PAGAMENTO
+    //CRIAR PAGAMENTO
     $payment = $asaas->createPayment([
         'customer' => $customer['id'],
         'billingType' => 'PIX',
@@ -46,13 +44,14 @@ class CheckoutController extends Controller
     if (!isset($payment['id'])) {
         return back()->with('error', 'Erro ao gerar pagamento');
     }
+    // if (!isset($payment['id'])) {
+    // dd($payment);
+// }
 
     // ATUALIZA PEDIDO
     $order->update([
-        'asaas_payment_id' => $payment['id'],
-        'status' => 'aguardando_pagamento'
+    'status' => 'pendente'
     ]);
-
     return redirect($payment['invoiceUrl']);
     }
 }
