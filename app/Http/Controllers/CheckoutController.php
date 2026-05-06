@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Services\AsaasService;
 use App\Http\Controllers\Controller;
+use App\Services\OrderService;
 
 class CheckoutController extends Controller
 {
-    public function store(AsaasService $asaas)
+    public function store(AsaasService $asaas, OrderService $orderService)
 {
     $order = Order::where('user_id', auth()->id())
         ->where('status', 'pendente')
@@ -39,6 +40,12 @@ class CheckoutController extends Controller
         'dueDate' => now()->addDays(1)->format('Y-m-d'),
         'description' => "Pedido #{$order->id}",
     ]);
+
+    $orderService->updateStatus(
+    $order,
+    'aguardando_pagamento',
+    'Aguardando pagamento via Asaas'
+    );
 
 
     if (!isset($payment['id'])) {

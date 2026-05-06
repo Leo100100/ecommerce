@@ -5,54 +5,67 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Log;
+use App\Services\OrderService;
+use App\Enums\OrderStatus;
 
 class WebhookController extends Controller
 {
-    public function handle(Request $request)
-    {
-        
-        Log::info('Webhook Asaas recebido', $request->all());
 
-        // Evento enviado pelo Asaas
-        $event = $request->input('event');
 
-        // ID do pagamento no Asaas
-        $paymentId = $request->input('payment.id');
 
-        if (!$paymentId) {
-            Log::warning('Webhook sem payment.id');
-            return response()->json(['error' => 'payment.id não encontrado'], 400);
-        }
+public function handle(Request $request, OrderService $orderService)
+{
+    Log::info('Webhook Asaas recebido', $request->all());
 
-        // Busca pedido no banco
-        $order = Order::where('asaas_payment_id', $paymentId)->first();
+    $event = $request->input('event');
+    $paymentId = $request->input('payment.id');
 
-        if (!$order) {
-            Log::warning('Pedido não encontrado para payment_id: ' . $paymentId);
-            return response()->json(['error' => 'Pedido não encontrado'], 404);
-        }
+    if (!$paymentId) {
+        Log::warning('Webhook sem payment.id');
+        return response()->json(['error' => 'payment.id não encontrado'], 400);
+    }
 
-        // Trata eventos do Asaas
+    $order = Order::where('asaas_payment_id', $paymentId)->first();
+
+    if (!$order) {
+        Log::warning('Pedido não encontrado para payment_id: ' . $paymentId);
+        return response()->json(['error' => 'Pedido não encontrado'], 404);
+    }
+
+    try {
+
         switch ($event) {
 
             case 'PAYMENT_RECEIVED':
             case 'PAYMENT_CONFIRMED':
-                $order->update([
-                    'status' => 'pago'
-                ]);
+
+                $orderService->updateStatus(
+                    $order,
+                    OrderStatus::PAGO,
+                    'Pagamento confirmado via webhook Asaas'
+                );
+
                 break;
 
             case 'PAYMENT_OVERDUE':
-                $order->update([
-                    'status' => 'vencido'
-                ]);
+
+                $orderService->updateStatus(
+                    $order,
+                    OrderStatus::VENCIDO,
+                    'Pagamento vencido'
+                );
+
                 break;
 
             case 'PAYMENT_DELETED':
             case 'PAYMENT_CANCELED':
-                $order->update([
-                    'status' => 'cancelado'
-                ]);
+
+                $orderService->updateStatus(
+                    $order,
+                    OrderStatus::CANCELADO,
+                    'Pagamento cancelado'
+                );
+
                 break;
 
             default:
@@ -60,6 +73,16 @@ class WebhookController extends Controller
                 break;
         }
 
-        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+
+        Log::error('Erro ao atualizar pedido', [
+            'error' => $e->getMessage()
+        ]);
+
+        return response()->json(['error' => 'Erro interno'], 500);
     }
+
+
+    return response()->json(['success' => true]);
+}
 }
