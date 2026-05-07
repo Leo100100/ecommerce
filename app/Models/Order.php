@@ -44,4 +44,9 @@ class Order extends Model
 
         $this->update(['total' => $total]);
     }
+    public function history()
+    {
+        return $this->hasMany(OrderStatusHistory::class)
+            ->orderBy('created_at', 'asc');
+    }
 }

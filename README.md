@@ -253,11 +253,11 @@ Product      hasMany    OrderItem
 
 ## O que o candidato deve implementar
 
-- [ ] Fluxo completo de criação de pedido com validação de estoque
-- [ ] Transição de status com regras de negócio
-- [ ] Integração com serviço de logística (rastreamento / cálculo de frete)
-- [ ] Endpoints REST para pedidos (`store`, `updateStatus`, cancelamento)
-- [ ] CRUD completo de produtos
+- [ x ] Fluxo completo de criação de pedido com validação de estoque
+- [ x ] Transição de status com regras de negócio
+- [ x ] Integração com serviço de logística (rastreamento / cálculo de frete)
+- [ x ] Endpoints REST para pedidos (`store`, `updateStatus`, cancelamento)
+- [ x ] CRUD completo de produtos
 - [ ] Testes unitários/feature para lógica de pedidos
 
 Os métodos marcados com `// TODO (candidato)` nos controllers e services são os pontos de entrada sugeridos.

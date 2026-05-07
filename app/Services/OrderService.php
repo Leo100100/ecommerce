@@ -70,33 +70,38 @@ class OrderService
         });
     }
     public function updateStatus(Order $order, string $status, ?string $descricao = null): Order
-    {
-
-        $transitions = [
-            OrderStatus::PENDENTE => [OrderStatus::AGUARDANDO, OrderStatus::CANCELADO],
-            OrderStatus::AGUARDANDO => [OrderStatus::PAGO, OrderStatus::CANCELADO],
-            OrderStatus::PAGO => [OrderStatus::ENVIADO],
-            OrderStatus::ENVIADO => [OrderStatus::ENTREGUE],
-        ];
-
-        $current = $order->status;
-
-        if (!isset($transitions[$current]) || !in_array($status, $transitions[$current])) {
-            throw new \Exception("Transição inválida: {$current} → {$status}");
-        }
-
-
-        $order->update([
-            'status' => $status
-        ]);
-
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'status' => $status,
-            'descricao' => $descricao
-        ]);
-
+{
+    if ($order->status === $status) {
         return $order;
     }
+
+    $transitions = [
+        OrderStatus::PENDENTE => [OrderStatus::AGUARDANDO, OrderStatus::CANCELADO],
+        OrderStatus::AGUARDANDO => [OrderStatus::PAGO, OrderStatus::CANCELADO, OrderStatus::VENCIDO],
+        OrderStatus::PAGO => [OrderStatus::ENVIADO],
+        OrderStatus::ENVIADO => [OrderStatus::ENTREGUE],
+        OrderStatus::ENTREGUE => [],
+        OrderStatus::CANCELADO => [],
+        OrderStatus::VENCIDO => []
+    ];
+
+    $current = $order->status;
+
+    if (!isset($transitions[$current]) || !in_array($status, $transitions[$current])) {
+        throw new \Exception("Transição inválida: {$current} → {$status}");
+    }
+
+    $order->update([
+        'status' => $status
+    ]);
+
+    OrderStatusHistory::create([
+        'order_id' => $order->id,
+        'status' => $status,
+        'descricao' => $descricao
+    ]);
+
+    return $order;
+}
 
 }

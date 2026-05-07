@@ -8,6 +8,8 @@ use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Enums\OrderStatus;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class OrderController extends Controller
 {
@@ -84,7 +86,7 @@ class OrderController extends Controller
 
         $product = Product::findOrFail($request->product_id);
 
-    // 1. pega ou cria carrinho do usuário
+    //  pega ou cria carrinho do usuário
         $order = Order::firstOrCreate(
             [
                 'user_id' => auth()->id(),
@@ -95,7 +97,7 @@ class OrderController extends Controller
             ]
         );
 
-    // 2. verifica se produto já existe no carrinho
+    // verifica se produto já existe no carrinho
         $item = OrderItem::where('order_id', $order->id)
             ->where('product_id', $product->id)
             ->first();
@@ -112,7 +114,7 @@ class OrderController extends Controller
                 'preco' => $product->preco ?? $product->price,
             ]);
         }
-    // 3. recalcula total
+    //  recalcula total
         $order->update([
             'total' => $order->items->sum(fn ($i) => $i->quantidade * $i->preco),
         ]);
@@ -122,7 +124,7 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
-        dd("oi");
+        // dd("oi");
         try {
             $order->delete();
         } catch (\Exception $e) {
@@ -130,6 +132,15 @@ class OrderController extends Controller
         }
         return redirect()->route('orders.index')
             ->with('success', 'Pedido excluído com sucesso!');
+    }
+    public function print($id)
+    {
+        $order = Order::with('items.product', 'history', 'user')
+            ->findOrFail($id);
+
+        $pdf = Pdf::loadView('orders.print', compact('order'));
+
+        return $pdf->stream("pedido-{$order->id}.pdf");
     }
 
 

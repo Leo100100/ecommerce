@@ -9,6 +9,17 @@
         Novo Pedido
     </a>
 </div>
+<form method="GET" action="{{ route('reports.orders') }}" class="d-flex gap-2">
+
+    <input type="date" name="data_inicio" class="form-control" required>
+
+    <input type="date" name="data_fim" class="form-control" required>
+
+    <button class="btn btn-primary">
+        Gerar Relatório
+    </button>
+
+</form>
 
 <div class="card">
     <div class="card-body p-0">

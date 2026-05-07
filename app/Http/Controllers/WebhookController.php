@@ -15,6 +15,18 @@ class WebhookController extends Controller
 
 public function handle(Request $request, OrderService $orderService)
 {
+    // VALIDAÇÃO DE SEGURANÇA
+    $signature = $request->header('asaas-signature');
+    $payload = $request->getContent();
+    $secret = config('services.asaas.webhook_secret');
+
+    $expectedSignature = hash_hmac('sha256', $payload, $secret);
+
+    if (!hash_equals($expectedSignature, $signature)) {
+        Log::warning('Webhook inválido - assinatura incorreta');
+        return response()->json(['error' => 'Invalid signature'], 403);
+    }
+
     Log::info('Webhook Asaas recebido', $request->all());
 
     $event = $request->input('event');

@@ -14,6 +14,7 @@ Route::middleware(['auth'])->group(function () {
     require __DIR__.'/products.php';
     require __DIR__.'/cart.php';
     require __DIR__.'/checkout.php';
+    require __DIR__.'/reports.php';
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
