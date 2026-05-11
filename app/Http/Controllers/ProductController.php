@@ -9,7 +9,10 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::paginate(10);
+        // $products = Product::where('user_id', auth()->id());
+        // dd($products->toRawSql());
+
+        $products = Product::where('user_id', auth()->id())->paginate(40);
 
         return view('products.index', compact('products'));
     }
@@ -25,13 +28,18 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'nome' => 'required',
-            'preco' => 'required|numeric',
-            'descricao' => 'nullable',
+        $validated = $request->validate([
+            'nome'     => 'required|string|max:255',
+            'descricao'=> 'nullable|string',
+            'preco'    => 'required|numeric|min:0',
+            'estoque'  => 'required|integer|min:0',
+            'ativo'    => 'nullable|boolean',
         ]);
 
-        Product::create($request->all());
+        $validated['ativo'] = $request->boolean('ativo');
+        $validated['user_id'] = auth()->id();
+
+        Product::create($validated);
 
         return redirect()->route('products.index')
             ->with('success', 'Produto criado com sucesso!');
@@ -39,18 +47,26 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        abort_if($product->user_id !== auth()->id(), 403);
+
         return view('products.edit', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'nome' => 'required',
-            'preco' => 'required|numeric',
-            'descricao' => 'nullable',
+        abort_if($product->user_id !== auth()->id(), 403);
+
+        $validated = $request->validate([
+            'nome'     => 'required|string|max:255',
+            'descricao'=> 'nullable|string',
+            'preco'    => 'required|numeric|min:0',
+            'estoque'  => 'required|integer|min:0',
+            'ativo'    => 'nullable|boolean',
         ]);
 
-        $product->update($request->all());
+        $validated['ativo'] = $request->boolean('ativo');
+
+        $product->update($validated);
 
         return redirect()->route('products.index')
             ->with('success', 'Produto atualizado com sucesso!');
@@ -58,6 +74,8 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        abort_if($product->user_id !== auth()->id(), 403);
+
         $product->delete();
 
         return redirect()->route('products.index')

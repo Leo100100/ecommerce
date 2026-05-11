@@ -16,6 +16,13 @@ class Order extends Model
         'total',
         'status',
         'observacoes',
+        'endereco_entrega',
+        'data_entrega_prevista',
+        'pagamento_titular',
+        'pagamento_bandeira',
+        'pagamento_ultimos_digitos',
+        'pagamento_validade',
+        'frete_valor',
     ];
 
     protected $casts = [

@@ -16,6 +16,8 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::with('user')
+            ->where('user_id', auth()->id())
+            ->where('status', '!=', 'pendente')
             ->latest()
             ->paginate(10);
 
@@ -118,6 +120,11 @@ class OrderController extends Controller
         $order->update([
             'total' => $order->items->sum(fn ($i) => $i->quantidade * $i->preco),
         ]);
+
+        if ($request->expectsJson()) {
+            $count = $order->fresh('items')->items->sum('quantidade');
+            return response()->json(['success' => true, 'count' => $count]);
+        }
 
         return back()->with('success', 'Produto adicionado ao carrinho!');
     }

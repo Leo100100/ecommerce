@@ -1,108 +1,106 @@
 @extends('layouts.app')
-@section('title', 'Pedidos')
+@section('title', 'Meus Pedidos')
+
+@push('styles')
+<style>
+    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .toolbar-title { font-size: 1.2rem; font-weight: bold; margin: 0; flex: 1; }
+
+    .order-id   { font-weight: 600; color: #0066cc; font-size: 0.875rem; }
+    .order-date { font-size: 0.75rem; color: #888; }
+
+    .total-cell { font-weight: bold; font-size: 0.95rem; }
+
+    .action-cell { display: flex; gap: 6px; align-items: center; justify-content: flex-start; }
+
+    .table-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        overflow: hidden;
+    }
+    .pagination-wrap { padding: 16px 20px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; }
+</style>
+@endpush
 
 @section('content')
-<div class="d-flex align-items-center justify-content-between mb-4">
-    <h4 class="mb-0">Pedidos</h4>
 
-    <a href="{{ route('orders.create') }}" class="btn btn-primary">
-        Novo Pedido
+<div class="toolbar">
+    <h1 class="toolbar-title">Pedidos</h1>
+    <a href="{{ route('products.index') }}" class="btn-ec-ghost">
+        <i class="bi bi-bag-plus"></i> Continuar comprando
     </a>
 </div>
-<form method="GET" action="{{ route('reports.orders') }}" class="d-flex gap-2">
 
-    <input type="date" name="data_inicio" class="form-control" required>
-
-    <input type="date" name="data_fim" class="form-control" required>
-
-    <button class="btn btn-primary">
-        Gerar Relatório
-    </button>
-
-</form>
-
-<div class="card">
-    <div class="card-body p-0">
-        <table class="table table-hover table-bordered mb-0">
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Cliente</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Data</th>
-                    <th class="text-center">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($orders as $order)
-                <tr>
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $order->user->name }}</td>
-                    <td>R$ {{ number_format($order->total, 2, ',', '.') }}</td>
-                    <td>
-                        @php
-                            $badgeMap = [
-                                'pendente'      => 'warning',
-                                'confirmado'    => 'info',
-                                'em_preparacao' => 'primary',
-                                'enviado'       => 'secondary',
-                                'entregue'      => 'success',
-                                'cancelado'     => 'danger',
-                            ];
-                            $color = $badgeMap[$order->status] ?? 'light';
-                        @endphp
-                        <span class="badge bg-{{ $color }}">
-                            {{ ucfirst(str_replace('_', ' ', $order->status)) }}
-                        </span>
-                    </td>
-                    <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-
-                    <td class="text-center">
-
-                        {{-- Ver --}}
-                        <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-primary">
-                            Ver
+<div class="table-card">
+    <table class="ec-table">
+        <thead>
+            <tr>
+                <th>Pedido</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($orders as $order)
+            @php
+                $badgeMap = [
+                    'pendente'      => 'ec-badge-warning',
+                    'confirmado'    => 'ec-badge-info',
+                    'em_preparacao' => 'ec-badge-info',
+                    'enviado'       => 'ec-badge-muted',
+                    'entregue'      => 'ec-badge-success',
+                    'cancelado'     => 'ec-badge-danger',
+                ];
+                $badgeClass = $badgeMap[$order->status] ?? 'ec-badge-muted';
+            @endphp
+            <tr>
+                <td>
+                    <div class="order-id">#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</div>
+                    <div class="order-date">{{ $order->created_at->format('d/m/Y H:i') }}</div>
+                </td>
+                <td class="total-cell">R$ {{ number_format($order->total, 2, ',', '.') }}</td>
+                <td>
+                    <span class="ec-badge {{ $badgeClass }}">
+                        {{ ucfirst(str_replace('_', ' ', $order->status)) }}
+                    </span>
+                </td>
+                <td>
+                    <div class="action-cell">
+                        <a href="{{ route('orders.show', $order) }}" class="btn-ec-ghost">
+                            <i class="bi bi-eye"></i> Ver
                         </a>
 
-                        {{-- Atualizar status --}}
-                        <form action="{{ route('orders.updateStatus', $order) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('PATCH')
+                        @if($order->status === 'pendente' || $order->status === 'confirmado')
+                            <form action="{{ route('orders.cancel', $order) }}" method="POST" class="m-0"
+                                  onsubmit="return confirm('Cancelar pedido #{{ $order->id }}?')">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn-ec-danger">
+                                    <i class="bi bi-x-lg"></i> Cancelar
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="4" style="padding:60px; text-align:center; color:#888;">
+                    <i class="bi bi-receipt" style="font-size:2.5rem; display:block; margin-bottom:12px;"></i>
+                    Você ainda não tem pedidos.
+                    <br>
+                    <a href="{{ route('products.index') }}" class="btn-ec-primary mt-3" style="display:inline-flex;">
+                        <i class="bi bi-bag-plus"></i> Ver produtos
+                    </a>
+                </td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
 
-                            <select name="status" class="form-select form-select-sm d-inline w-auto">
-                                <option value="confirmado">Confirmar</option>
-                                <option value="em_preparacao">Preparação</option>
-                                <option value="enviado">Enviar</option>
-                                <option value="entregue">Entregar</option>
-                            </select>
-
-                            <button class="btn btn-sm btn-warning">OK</button>
-                        </form>
-
-                        {{-- Cancelar --}}
-                        <form action="{{ route('orders.cancel', $order) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('PATCH')
-
-                            <button class="btn btn-sm btn-danger">Cancelar</button>
-                        </form>
-
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center text-muted py-4">
-                        Nenhum pedido encontrado.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    @if($orders->hasPages())
-    <div class="card-footer">
+    @if(method_exists($orders, 'hasPages') && $orders->hasPages())
+    <div class="pagination-wrap">
         {{ $orders->links() }}
     </div>
     @endif

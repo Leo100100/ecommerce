@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
@@ -11,6 +12,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nome',
         'descricao',
         'preco',
@@ -22,6 +24,11 @@ class Product extends Model
         'preco'  => 'decimal:2',
         'ativo'  => 'boolean',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function orderItems(): HasMany
     {

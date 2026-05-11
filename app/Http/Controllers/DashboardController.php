@@ -18,7 +18,7 @@ class DashboardController extends Controller
         //  ];
 
         $products = Product::latest()->take(9)->get();
-        return view('dashboard', compact('products'));
+        return view('home', compact('products'));
     }
 
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,8 +21,25 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
         ]);
 
+        User::updateOrCreate(
+            ['email' => 'seller@example.com'],
+            [
+                'name'     => 'Seller',
+                'email'    => 'seller@example.com',
+                'password' => Hash::make('12345678'),
+                'vendedor' => true,
+                'cnpj'     => '00000000000000',
+            ]
+        );
+
+        $this->command->info('Usuario criado: admin@example.com / senha: password');
+        $this->command->info('Vendedor criado: seller@example.com / senha: 12345678');
+
         $this->call([
             ProductSeeder::class,
         ]);
+
     }
+
+
 }
