@@ -141,9 +141,30 @@
 @section('content')
 
 <div style="font-size:.8rem;color:#666;margin-bottom:8px;">
-    <a href="{{ route('cart.index') }}" style="color:#0066cc;text-decoration:none;">Carrinho</a>
-    &rsaquo; Finalizar compra
+    <div class="d-grid gap-2 mt-4">
+
+    <form action="{{ route('checkout.asaas') }}" method="POST">
+        @csrf
+        <input type="hidden" name="billingType" value="PIX">
+
+        <button type="submit"
+                class="btn btn-success w-100">
+            Pagamento PIX via ASAAS
+        </button>
+    </form>
+
+    <form action="{{ route('checkout.asaas') }}" method="POST">
+        @csrf
+        <input type="hidden" name="billingType" value="BOLETO">
+
+        <button type="submit"
+                class="btn btn-dark w-100 mt-2">
+            Pagamento boleto via ASAAS
+        </button>
+    </form>
+
 </div>
+    </div>
 
 <div class="d-flex align-items-center justify-content-between mb-4">
     <h1 class="ec-page-title">Finalizar Compra</h1>

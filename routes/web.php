@@ -19,6 +19,7 @@ Route::middleware(['auth'])->group(function () {
     require __DIR__.'/checkout.php';
     require __DIR__.'/orders.php';
     require __DIR__.'/reports.php';
+    require __DIR__.'/asaas.php';
 
     // Perfil
     Route::get('/perfil',                                [ProfileController::class, 'index'])->name('profile.index');

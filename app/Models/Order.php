@@ -23,6 +23,9 @@ class Order extends Model
         'pagamento_ultimos_digitos',
         'pagamento_validade',
         'frete_valor',
+        'asaas_payment_id',
+        'asaas_invoice_url',
+        'asaas_bank_slip_url',
     ];
 
     protected $casts = [

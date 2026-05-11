@@ -9,15 +9,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('asaas_payment_id')->nullable()->after('status');
-            $table->string('asaas_invoice_url')->nullable()->after('asaas_payment_id');
+
+            $table->string('asaas_payment_id')->nullable();
+            $table->string('asaas_invoice_url')->nullable();
+            $table->string('asaas_bank_slip_url')->nullable();
+
         });
     }
 
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn(['asaas_payment_id', 'asaas_invoice_url']);
+
+            $table->dropColumn([
+                'asaas_payment_id',
+                'asaas_invoice_url',
+                'asaas_bank_slip_url',
+            ]);
+
         });
     }
 };

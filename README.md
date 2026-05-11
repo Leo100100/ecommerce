@@ -116,3 +116,72 @@ entregue
 cancelado
 
 
+
+
+Integração ASAAS (PIX + Boleto)
+
+O sistema possui integração com a API do ASAAS para pagamentos via:
+
+PIX
+Boleto bancário
+
+Configurar variáveis no .env
+ASAAS_API_URL=https://sandbox.asaas.com/api/v3
+ASAAS_API_KEY='$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjJiN2Q3ODlhLWRmM2ItNGE1ZS04YTc2LTFkNjM3NjRkMmYzYTo6JGFhY2hfOGI5ZmVhNDQtZjMwYi00NmIwLWIzNjktMWJiYmMzZDQ5MWFl'
+ASAAS_WEBHOOK_SECRET=whsec_G0gk831xfEiHXyB6v9oNbNqE0HDA21tNTYV_LARtL2I
+
+Para produção:
+
+ASAAS_API_URL=https://api.asaas.com/api/v3
+Rodar migrations
+
+Docker:
+
+docker compose exec app php artisan migrate
+
+Sem Docker:
+
+php artisan migrate
+Configurar webhook do ASAAS
+
+O webhook é responsável por atualizar automaticamente o status dos pedidos após confirmação do pagamento.
+
+Rota do webhook:
+
+POST /asaas/webhook
+
+Exemplo usando ngrok:
+
+https://SEU_NGROK.ngrok-free.app/asaas/webhook
+Eventos recomendados
+
+Ativar no painel do ASAAS:
+
+PAYMENT_RECEIVED
+PAYMENT_CONFIRMED
+PAYMENT_OVERDUE
+PAYMENT_CANCELED
+Testar webhook localmente
+
+Rodar ngrok:
+
+ngrok http 8000
+
+Depois configurar a URL gerada no painel do ASAAS.
+
+Fluxo de pagamento
+Cliente adiciona produtos ao carrinho
+Escolhe pagamento via PIX ou boleto
+Sistema gera cobrança no ASAAS
+ASAAS envia webhook após confirmação
+Pedido é atualizado automaticamente
+Campos adicionados na tabela orders
+asaas_payment_id
+asaas_invoice_url
+asaas_bank_slip_url
+Status automáticos do pedido
+aguardando_pagamento
+pago
+vencido
+cancelado
+

@@ -244,6 +244,7 @@
                 <a href="{{ route('checkout.index') }}" class="btn-ec-primary w-100 justify-content-center mt-4" style="width:100%;padding:10px 20px;display:flex;">
                     <i class="bi bi-lock-fill"></i> Finalizar compra
                 </a>
+                
 
                 <a href="{{ route('search.index') }}" class="btn-ec-ghost w-100 justify-content-center mt-2" style="width:100%;">
                     <i class="bi bi-arrow-left"></i> Continuar comprando
