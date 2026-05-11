@@ -115,14 +115,4 @@ enviado
 entregue
 cancelado
 
-O que precisa ser feito
 
-[x] Fluxo de pedidos
-[x] Controle de estoque
-[x] Alteração de status
-[x] Integração com logística
-[x] API de pedidos
-[x] CRUD de produtos
-[ ] Testes automatizados
-
-Os pontos com TODO no projeto são os locais sugeridos para implementação.
